@@ -2,7 +2,7 @@
 
 # Procsy
 
-![Stars + License](https://shieldcn.dev/group/github/stars/Scolup/Procsy+github/license/Scolup/Procsy.svg+github/release/Scolup/Procsy.svg+badge/status-stable-brightgreen.svg?variant=branded&mode=light)
+![Stars + License](https://shieldcn.dev/group/github/stars/Scolup/Procsy+github/license/Scolup/Procsy+github/release/Scolup/Procsy+badge/status-stable-brightgreen.svg?variant=branded&mode=light)
 
 ![Cloudflare Workers](https://shieldcn.dev/badge/Cloudflare-Workers-F38020.svg?logo=cloudflareworkers&logoColor=fff&variant=branded&mode=light)
 ![Hono](https://shieldcn.dev/badge/Hono-E36002.svg?logo=hono&logoColor=fff&variant=branded&mode=light)
