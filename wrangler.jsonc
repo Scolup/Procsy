@@ -1,0 +1,17 @@
+{
+  "name": "procsy",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-06-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "DEFAULT_BASE_URL": "example.com",
+    "FORCE_HTTPS": "false",
+    "ALLOW_ORIGIN": "*",
+    "SPOOF_IP": "true",
+    "ALLOW_BASE_URL_HEADER": "true"
+  },
+  "build": {
+    "command": "npm run build",
+    "watch_dir": "src"
+  }
+}

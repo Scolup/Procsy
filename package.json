@@ -1,0 +1,23 @@
+{
+  "name": "procsy",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "dev": "wrangler dev dist/index.js",
+    "deploy": "wrangler deploy dist/index.js",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260522.1",
+    "prettier": "^3.8.3",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.94.0"
+  },
+  "dependencies": {
+    "hono": "^4.12.22"
+  }
+}
