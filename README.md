@@ -2,7 +2,7 @@
 
 # Procsy
 
-![Stars + License](https://shieldcn.dev/group/github/stars/Scolup/Procsy+github/license/Scolup/Procsy.svg+github/release/Scolup/Procsy.svg+badge/status-stable-brightgreen.svg?variant=branded&mode=light)
+![Stars + License](https://shieldcn.dev/group/github/stars/Scolup/Procsy+github/license/Scolup/Procsy+github/release/Scolup/Procsy+badge/status-stable-brightgreen.svg?variant=branded&mode=light)
 
 ![Cloudflare Workers](https://shieldcn.dev/badge/Cloudflare-Workers-F38020.svg?logo=cloudflareworkers&logoColor=fff&variant=branded&mode=light)
 ![Hono](https://shieldcn.dev/badge/Hono-E36002.svg?logo=hono&logoColor=fff&variant=branded&mode=light)
@@ -38,6 +38,7 @@ Procsy reads its configuration from **Cloudflare Workers environment variables**
 | `ALLOW_ORIGIN` | `*` | Comma-separated list of allowed origins (e.g. `google.com, neal.fun`). |
 | `SPOOF_IP` | `true` | Whether to spoof the IP via `X-Forwarded-For`. |
 | `ALLOW_BASE_URL_HEADER` | `true` | Whether to allow the `X-Procsy-Base-URL` header to control the destination URL. |
+| `POPULATE_HEADER` | `[]` | JSON array of key-value pairs to populate the request headers with. |
 
 For local development, edit `wrangler.jsonc` under the `"vars"` key.
 For production, set these values in the **Cloudflare Dashboard** → your Worker → **Variables**, or use `wrangler secret put`.

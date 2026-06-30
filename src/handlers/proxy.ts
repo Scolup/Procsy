@@ -82,6 +82,17 @@ export const proxyHandler: Handler<{ Bindings: Bindings }> = async (c) => {
   }
   newHeaders.set('Host', baseURL)
 
+  // Apply header population if configured
+  if (config.populateHeader) {
+    for (const [headerName, headerValue] of Object.entries(
+      config.populateHeader,
+    )) {
+      if (incomingRequest.headers.has(headerName)) {
+        newHeaders.set(headerName, headerValue)
+      }
+    }
+  }
+
   const requestInit: RequestInit = {
     method: incomingRequest.method,
     headers: newHeaders,
