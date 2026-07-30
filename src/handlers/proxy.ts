@@ -74,8 +74,15 @@ export const proxyHandler: Handler<{ Bindings: Bindings }> = async (c) => {
     'cf-ipcountry',
     'cdn-loop',
     'x-procsy-base-url',
+    'x-procsy-user-agent',
   ]
   headersToDelete.forEach((h) => newHeaders.delete(h))
+
+  // Transform X-Procsy-User-Agent into User-Agent
+  const procsyUserAgent = incomingRequest.headers.get('X-Procsy-User-Agent')
+  if (procsyUserAgent) {
+    newHeaders.set('User-Agent', procsyUserAgent)
+  }
 
   if (config.spoofIP !== false) {
     newHeaders.set('X-Forwarded-For', generateRandomIP())
