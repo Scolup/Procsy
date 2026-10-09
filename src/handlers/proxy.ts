@@ -75,6 +75,7 @@ export const proxyHandler: Handler<{ Bindings: Bindings }> = async (c) => {
     'cdn-loop',
     'x-procsy-base-url',
     'x-procsy-user-agent',
+    'x-procsy-cookie',
   ]
   headersToDelete.forEach((h) => newHeaders.delete(h))
 
@@ -82,6 +83,14 @@ export const proxyHandler: Handler<{ Bindings: Bindings }> = async (c) => {
   const procsyUserAgent = incomingRequest.headers.get('X-Procsy-User-Agent')
   if (procsyUserAgent) {
     newHeaders.set('User-Agent', procsyUserAgent)
+  }
+
+  // Opt-in cookie bridging: browsers forbid the `Cookie` header, so
+  // cookie-jar clients send their session in `X-Procsy-Cookie` instead.
+  // Stateless: only the caller's own session transits, nothing is stored.
+  const procsyCookie = incomingRequest.headers.get('X-Procsy-Cookie')
+  if (procsyCookie) {
+    newHeaders.set('Cookie', procsyCookie)
   }
 
   if (config.spoofIP !== false) {
@@ -115,6 +124,17 @@ export const proxyHandler: Handler<{ Bindings: Bindings }> = async (c) => {
 
     const responseHeaders = new Headers(response.headers)
 
+    // Mirror of the bridging above: upstream `Set-Cookie` values are
+    // unreadable from browsers, so expose them as JSON in a plain header
+    // (CORS already exposes all headers). Only set when present.
+    const upstreamCookies = getSetCookies(response.headers)
+    if (upstreamCookies.length > 0) {
+      responseHeaders.set(
+        'X-Procsy-Set-Cookie',
+        JSON.stringify(upstreamCookies),
+      )
+    }
+
     return new Response(response.body, {
       status: response.status,
       statusText: response.statusText,
@@ -123,4 +143,19 @@ export const proxyHandler: Handler<{ Bindings: Bindings }> = async (c) => {
   } catch (err: any) {
     return c.text(`Proxy Error: ${err.message}`, 502)
   }
+}
+
+/** All `Set-Cookie` values (never comma-joined: `Expires` contains commas). */
+function getSetCookies(headers: Headers): string[] {
+  const direct = (headers as unknown as { getSetCookie?: () => string[] })
+    .getSetCookie
+  if (typeof direct === 'function') {
+    try {
+      return direct.call(headers)
+    } catch {
+      return []
+    }
+  }
+  const single = headers.get('set-cookie')
+  return single ? [single] : []
 }
