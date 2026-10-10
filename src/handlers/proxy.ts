@@ -1,7 +1,7 @@
 import type { Handler } from 'hono'
 import type { Bindings } from '../config'
 import { getConfig } from '../config'
-import { generateRandomIP } from '../utils/ip'
+import { stableSpoofedIP } from '../utils/ip'
 import { getTargetURL } from '../utils/url'
 
 function isPrivateHost(hostname: string): boolean {
@@ -94,7 +94,12 @@ export const proxyHandler: Handler<{ Bindings: Bindings }> = async (c) => {
   }
 
   if (config.spoofIP !== false) {
-    newHeaders.set('X-Forwarded-For', generateRandomIP())
+    newHeaders.set(
+      'X-Forwarded-For',
+      stableSpoofedIP(
+        newHeaders.get('Cookie') ?? incomingRequest.headers.get('X-Procsy-Cookie'),
+      ),
+    )
   }
   newHeaders.set('Host', baseURL)
 
@@ -133,6 +138,23 @@ export const proxyHandler: Handler<{ Bindings: Bindings }> = async (c) => {
         'X-Procsy-Set-Cookie',
         JSON.stringify(upstreamCookies),
       )
+      // EcoleDirecte envoie ses propres listes CORS figées qui peuvent
+      // masquer ce header au JS : garantir ici même son exposition.
+      const exposed = responseHeaders.get('Access-Control-Expose-Headers')
+      if (!exposed) {
+        responseHeaders.set(
+          'Access-Control-Expose-Headers',
+          'X-Procsy-Set-Cookie',
+        )
+      } else if (
+        !/^\s*\*\s*$/.test(exposed) &&
+        !/x-procsy-set-cookie/i.test(exposed)
+      ) {
+        responseHeaders.set(
+          'Access-Control-Expose-Headers',
+          `${exposed}, X-Procsy-Set-Cookie`,
+        )
+      }
     }
 
     return new Response(response.body, {
