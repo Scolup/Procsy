@@ -12,6 +12,7 @@ const REQUEST_HEADERS_TO_STRIP = [
   'cf-ipcountry',
   'cdn-loop',
   'x-procsy-base-url',
+  'x-procsy-user-agent',
 ]
 
 const RESPONSE_HEADERS_TO_STRIP = [
@@ -147,6 +148,9 @@ export const proxyHandler: Handler<{ Bindings: Bindings }> = async (c) => {
 
   const headers = new Headers(incomingRequest.headers)
   for (const name of REQUEST_HEADERS_TO_STRIP) headers.delete(name)
+
+  const userAgent = incomingRequest.headers.get('X-Procsy-User-Agent')
+  if (userAgent) headers.set('User-Agent', userAgent)
 
   if (config.spoofIP) headers.set('X-Forwarded-For', generateRandomIP())
 

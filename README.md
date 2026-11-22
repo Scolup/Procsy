@@ -17,6 +17,8 @@ HTTP(S) proxy in TypeScript, running on Cloudflare Workers.
 - **CORS**: reflects the caller's origin and exposes proxy response headers.
 - **Configurable**: all options are Cloudflare Workers environment variables.
 - **Destination override**: `X-Procsy-Base-URL` selects the upstream host.
+- **User-Agent override**: `X-Procsy-User-Agent` replaces the browser's
+  `User-Agent`, which browsers do not allow scripts to set directly.
 - **SSRF protection**: rejects requests to private and reserved IP addresses.
 
 ## Configuration
