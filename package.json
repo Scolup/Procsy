@@ -1,0 +1,25 @@
+{
+  "name": "procsy",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260522.1",
+    "prettier": "^3.8.3",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.94.0"
+  },
+  "dependencies": {
+    "hono": "^4.12.22"
+  }
+}
