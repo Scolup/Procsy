@@ -4,6 +4,7 @@ export interface AppConfig {
   readonly forceHTTPS: boolean
   readonly spoofIP: boolean
   readonly allowOrigin: string
+  readonly populateHeader: Record<string, string>
 }
 
 export interface Bindings {
@@ -12,6 +13,34 @@ export interface Bindings {
   ALLOW_ORIGIN?: string
   SPOOF_IP?: string
   ALLOW_BASE_URL_HEADER?: string
+  POPULATE_HEADER?: string
+}
+
+const HEADER_NAME = /^[a-zA-Z0-9-]+$/
+
+function parsePopulateHeader(
+  value: string | undefined,
+): Record<string, string> {
+  if (!value) return {}
+  try {
+    const parsed: unknown = JSON.parse(value)
+    if (!Array.isArray(parsed)) return {}
+
+    const result: Record<string, string> = {}
+    for (const item of parsed) {
+      if (typeof item !== 'object' || item === null || Array.isArray(item)) {
+        continue
+      }
+      for (const [name, headerValue] of Object.entries(item)) {
+        if (HEADER_NAME.test(name) && typeof headerValue === 'string') {
+          result[name] = headerValue
+        }
+      }
+    }
+    return result
+  } catch {
+    return {}
+  }
 }
 
 export function getConfig(env: Bindings): AppConfig {
@@ -21,5 +50,6 @@ export function getConfig(env: Bindings): AppConfig {
     allowOrigin: env.ALLOW_ORIGIN ?? '*',
     spoofIP: env.SPOOF_IP !== 'false',
     allowBaseURLHeader: env.ALLOW_BASE_URL_HEADER !== 'false',
+    populateHeader: parsePopulateHeader(env.POPULATE_HEADER),
   }
 }

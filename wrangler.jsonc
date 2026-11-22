@@ -8,6 +8,7 @@
     "FORCE_HTTPS": "false",
     "ALLOW_ORIGIN": "*",
     "SPOOF_IP": "true",
-    "ALLOW_BASE_URL_HEADER": "true"
+    "ALLOW_BASE_URL_HEADER": "true",
+    "POPULATE_HEADER": "[]"
   }
 }

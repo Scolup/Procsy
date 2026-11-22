@@ -149,6 +149,10 @@ export const proxyHandler: Handler<{ Bindings: Bindings }> = async (c) => {
   for (const name of REQUEST_HEADERS_TO_STRIP) headers.delete(name)
 
   if (config.spoofIP) headers.set('X-Forwarded-For', generateRandomIP())
+
+  for (const [name, value] of Object.entries(config.populateHeader)) {
+    headers.set(name, value)
+  }
   headers.set('Host', baseURL)
 
   const requestInit: RequestInit = {

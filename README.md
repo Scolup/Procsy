@@ -21,13 +21,14 @@ HTTP(S) proxy in TypeScript, running on Cloudflare Workers.
 
 ## Configuration
 
-| Variable                | Default       | Description                                      |
-| ----------------------- | ------------- | ------------------------------------------------ |
-| `DEFAULT_BASE_URL`      | `example.com` | Default upstream host.                           |
-| `FORCE_HTTPS`           | `false`       | Redirect HTTP requests to HTTPS.                 |
-| `ALLOW_ORIGIN`          | `*`           | Comma-separated allowed origins, or `*` for any. |
-| `SPOOF_IP`              | `true`        | Set a spoofed `X-Forwarded-For` header.          |
-| `ALLOW_BASE_URL_HEADER` | `true`        | Honour `X-Procsy-Base-URL`.                      |
+| Variable                | Default       | Description                                        |
+| ----------------------- | ------------- | -------------------------------------------------- |
+| `DEFAULT_BASE_URL`      | `example.com` | Default upstream host.                             |
+| `FORCE_HTTPS`           | `false`       | Redirect HTTP requests to HTTPS.                   |
+| `ALLOW_ORIGIN`          | `*`           | Comma-separated allowed origins, or `*` for any.   |
+| `SPOOF_IP`              | `true`        | Set a spoofed `X-Forwarded-For` header.            |
+| `ALLOW_BASE_URL_HEADER` | `true`        | Honour `X-Procsy-Base-URL`.                        |
+| `POPULATE_HEADER`       | `[]`          | JSON array of headers to set on upstream requests. |
 
 Set these in `wrangler.jsonc` for local development, or in the Cloudflare
 Dashboard → Worker → Variables for production.
